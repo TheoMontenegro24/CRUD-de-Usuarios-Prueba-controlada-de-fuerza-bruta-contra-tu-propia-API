@@ -22,11 +22,7 @@ class SalidaUsuario(BaseModel):
 
 # Base de datos quemada
 usuarios = [
-    {"id": 1, "usuario": "Theo", "correo": "theo@gmail.com", "password": "Admin123", "activa": True},
-    {"id": 2, "usuario": "Elianna",  "correo": "eliannna@gmail.com", "password": "Elianna123", "activa": True},
-    {"id": 3, "usuario": "Ariana",   "correo": "ariana@gmail.com",  "password": "Ar1ana", "activa": True},
-    {"id": 4, "usuario": "Luis",    "correo": "luis@gmail.com",   "password": "Luis2006", "activa": False},
-    {"id": 5, "usuario": "Sebas",    "correo": "sebas@gmail.com",   "password": "Sebas_Cal", "activa": True}
+    {"id": 1, "usuario": "Theo", "correo": "theo@gmail.com", "password": "acb", "activa": True},
 ]
 
 # Crear usuario
@@ -89,4 +85,4 @@ def login(payload: Login):
     user = next((x for x in usuarios if x["correo"] == payload.correo and x["password"] == payload.password), None)
     if user:
         return {"message": "Login exitoso"}
-    return {"message": "Credenciales inválidas"}
+    return {"message": "Credenciales inválidas"}
