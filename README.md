@@ -7,7 +7,8 @@ which will show us whether it was successful or not.
 
 API operation
 
-<img width="447" height="240" alt="image" src="https://github.com/user-attachments/assets/332dd418-a8c8-4328-96d3-73f32d31eebb" />
+<img width="355" height="76" alt="image" src="https://github.com/user-attachments/assets/8a7a1113-3a98-40d2-b941-6e247fbfe3cb" />
+
 
 
 Script functioning correctly
