@@ -3,7 +3,7 @@
 
 URL="http://127.0.0.1:8000/login"
 CORREO="theo@gmail.com"
-CHARS="abcdefghijklmnopqrstuvwxyz0123456789"
+CHARS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:,.<>/?"
 INTENTOS=0
 
 # Genera todas las combinaciones alfanuméricas de longitud fija
